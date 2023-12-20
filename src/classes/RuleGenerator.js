@@ -6,16 +6,17 @@ class RuleGenerator {
 
 	generateRules() {
 		const rules = new Map();
-		const n = this.moves.length;
-		const half = Math.floor(n / 2);
+		const half = Math.floor(this.moves.length / 2);
 
 		this.moves.forEach((move, i) => {
 			const outcomes = new Map();
-			for (let j = 0; j < n; j++) {
-				outcomes.set(this.moves[j], i === j ? "Draw" : (j - i + n) % n <= half ? "Win" : "Lose");
-			}
+			this.moves.forEach((compMove, j) => {
+				const result = i === j ? "Draw" : (j - i + this.moves.length) % this.moves.length <= half ? "Win" : "Lose";
+				outcomes.set(compMove, result);
+			});
 			rules.set(move, outcomes);
 		});
+
 		return rules;
 	}
 
